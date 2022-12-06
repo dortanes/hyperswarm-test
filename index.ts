@@ -9,17 +9,22 @@ const bridge = new Translink({
 // Subscriptions here
 
 bridge.connect()
-  .then(() => {
+  .then(async () => {
     console.log('Connected')
 
-    bridge.subscribe('t', (msg): any => {
-      const b = { t: Date.now(), q: Date.now() - msg.t, s: msg.s, r: hostname() }
-      console.log('pong ', b);
-      setTimeout(() => {
-        bridge.broadcastToAllNodes('t', b)
-      }, 200)
+    bridge.subscribeReq('0', async (res) => {
+      console.log('ping from', res.s, Date.now() - res.st)
+      return { s: hostname(), st: Date.now() };
     })
 
-    bridge.broadcastToAllNodes('t', { q: Date.now(), s: hostname() })
+    const s = async () => {
+      const st = Date.now()
+      console.log('ping', st)
+      const res = await bridge.broadcastReq('0', { s: hostname(), st })
+      console.log('pong from', res.s, Date.now() - res.st)
+      setTimeout(async () => await s(), 200)
+    }
+
+    await s()
   })
   .catch((e) => console.error('Connection error', e))
