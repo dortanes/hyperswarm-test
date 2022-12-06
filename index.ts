@@ -20,7 +20,7 @@ bridge.connect()
     const s = async () => {
       const st = Date.now()
       console.log('ping', st)
-      const res = await bridge.get('t', { s: hostname(), st })
+      const [res] = await bridge.broadcastReq('t', { s: hostname(), st })
       console.log('pong from', res.s, Date.now() - res.st)
       setTimeout(async () => await s(), 200)
     }
