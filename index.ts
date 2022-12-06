@@ -15,7 +15,7 @@ bridge.connect()
     bridge.subscribe('t', (msg): any => {
       console.log('pong ' + (Date.now() - Number(msg)));
       setTimeout(() => {
-        bridge.broadcastToAllNodes('t', Date.now() - Number(msg))
+        bridge.broadcastToAllNodes('t', Date.now())
       }, 200)
     })
 
