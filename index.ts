@@ -10,9 +10,9 @@ const bridge = new Translink({
 
 bridge.connect()
   .then(async () => {
-    console.log('Connected')
+    console.log('Connected. My name is', hostname())
 
-    bridge.subscribeReq('0', async (res) => {
+    bridge.subscribeReq('t', async (res) => {
       console.log('ping from', res.s, Date.now() - res.st)
       return { s: hostname(), st: Date.now() };
     })
@@ -20,7 +20,7 @@ bridge.connect()
     const s = async () => {
       const st = Date.now()
       console.log('ping', st)
-      const res = await bridge.broadcastReq('0', { s: hostname(), st })
+      const res = await bridge.get('t', { s: hostname(), st })
       console.log('pong from', res.s, Date.now() - res.st)
       setTimeout(async () => await s(), 200)
     }
