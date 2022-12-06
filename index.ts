@@ -13,12 +13,13 @@ bridge.connect()
     console.log('Connected')
 
     bridge.subscribe('t', (msg): any => {
-      console.log('pong ' + (Date.now() - Number(msg)));
+      const b = { t: Date.now(), q: Date.now() - msg.q, s: msg.s, r: hostname() }
+      console.log('pong ', b);
       setTimeout(() => {
-        bridge.broadcastToAllNodes('t', Date.now())
+        bridge.broadcastToAllNodes('t', b)
       }, 200)
     })
 
-    bridge.broadcastToAllNodes('t', Date.now())
+    bridge.broadcastToAllNodes('t', { q: Date.now(), s: hostname() })
   })
   .catch((e) => console.error('Connection error', e))
