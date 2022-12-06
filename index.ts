@@ -11,8 +11,6 @@ const bridge = new Translink({
 bridge.connect()
   .then(() => {
     console.log('Connected')
-    
-    bridge.emit('t', Date.now())
 
     bridge.subscribe('t', (msg): any => {
       console.log('pong ' + (Date.now() - Number(msg)));
@@ -20,5 +18,7 @@ bridge.connect()
         bridge.emit('t', Date.now() - Number(msg))
       }, 200)
     })
+
+    bridge.broadcastToAllNodes('t', Date.now())
   })
   .catch((e) => console.error('Connection error', e))
