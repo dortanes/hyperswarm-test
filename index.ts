@@ -13,7 +13,7 @@ bridge.connect()
     console.log('Connected')
 
     bridge.subscribe('t', (msg): any => {
-      const b = { t: Date.now(), q: Date.now() - msg.q, s: msg.s, r: hostname() }
+      const b = { t: Date.now(), q: Date.now() - msg.t, s: msg.s, r: hostname() }
       console.log('pong ', b);
       setTimeout(() => {
         bridge.broadcastToAllNodes('t', b)
